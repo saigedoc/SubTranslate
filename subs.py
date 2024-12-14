@@ -56,4 +56,4 @@ for name in names:
 	with open(f"temp/{name}_2.ass", "w", encoding='utf_8_sig') as f:
 		doc.dump_file(f)
 	subprocess.run(f"ffmpeg -i input/{name} -i temp/{name}_2.ass -codec copy -map 0 -map 1 output/{name}")
-	shutil.rmtree('temp')
+shutil.rmtree('temp')
