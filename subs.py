@@ -37,8 +37,7 @@ for name in names:
 	with open(f"temp/{name}.ass", encoding='utf_8_sig') as f:
 		doc = ass.parse(f)
 
-	pbar = tqdm.tqdm(desc="item", total=len(doc.events), unit='Dialogue')
-	pbar.set_description("Translating")
+	pbar = tqdm.tqdm(desc=f"Translating {name}", total=len(doc.events), unit='Dialogue')
 	for i in doc.events:
 		text0 = i.text
 		soup = BeautifulSoup(text0, 'html.parser')
