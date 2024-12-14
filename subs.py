@@ -10,7 +10,7 @@ import os
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device is {device}.\n")
 os.environ['HF_HOME'] = 'cache/'
-for dr in ["input, temp, output"]:
+for dr in ["input", "temp", "output"]:
 	if not os.path.exists(dr):
 		os.mkdir(dr)
 
