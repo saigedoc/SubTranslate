@@ -4,6 +4,7 @@ import subprocess
 import shutil
 import torch
 import tqdm
+import ass
 import os
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -12,6 +13,7 @@ os.environ['HF_HOME'] = 'cache/'
 for dr in ["input, temp, output"]:
 	if not os.path.exists(dr):
 		os.mkdir(dr)
+
 tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-ru", cache_dir="cache", local_files_only=True, device_map = device)
 model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-en-ru", cache_dir="cache", local_files_only=True, device_map = device)
 
@@ -33,7 +35,6 @@ def remove_bad(text):
 names = os.listdir("input")
 for name in names:
 	subprocess.run(f"ffmpeg -i input/{name} -map 0:s:0 temp/{name}.ass")
-	import ass
 	with open(f"temp/{name}.ass", encoding='utf_8_sig') as f:
 		doc = ass.parse(f)
 
