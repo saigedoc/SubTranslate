@@ -1,17 +1,22 @@
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from bs4 import BeautifulSoup
+import subprocess
+import shutil
+import torch
 import tqdm
 import os
-import shutil
-import subprocess
-from bs4 import BeautifulSoup
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"Using device is {device}.\n")
 os.environ['HF_HOME'] = 'cache/'
-os.mkdir("temp")
-tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-ru", cache_dir="cache", local_files_only=True)
-model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-en-ru", cache_dir="cache", local_files_only=True)
+if not os.path.exists("temp"):
+	os.mkdir("temp")
+tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-ru", cache_dir="cache", local_files_only=True, device_map = device)
+model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-en-ru", cache_dir="cache", local_files_only=True, device_map = device)
 
 def translate(text):
 	input_ids = tokenizer(text, return_tensors="pt").input_ids
-	outputs = model.generate(input_ids=input_ids, num_beams=5, num_return_sequences=3)
+	outputs = model.generate(input_ids=input_ids.to(device), num_beams=5, num_return_sequences=3)
 	return tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
 
 def remove_bad(text):
