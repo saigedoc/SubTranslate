@@ -13,9 +13,9 @@ os.environ['HF_HOME'] = 'cache/'
 for dr in ["input", "temp", "output"]:
 	if not os.path.exists(dr):
 		os.mkdir(dr)
-
-tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-ru", cache_dir="cache", local_files_only=True, device_map = device)
-model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-en-ru", cache_dir="cache", local_files_only=True, device_map = device)
+		
+tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-ru", cache_dir="cache", local_files_only=False if os.listdir("cache") == [".gitignore"] else True, device_map = device)
+model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-en-ru", cache_dir="cache", local_files_only=False if os.listdir("cache") == [".gitignore"] else True, device_map = device)
 
 def translate(text):
 	input_ids = tokenizer(text, return_tensors="pt").input_ids
